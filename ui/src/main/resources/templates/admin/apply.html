@@ -1,0 +1,86 @@
+<div class="container-fluid" id="applyListMain" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- TABLE HOVER -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <p>申请管理</p>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>登录名</th>
+                            <th>名称</th>
+                            <th>分享篇数</th>
+                            <th>查看用户</th>
+                            <th>处理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="apply:${applys}">
+                            <td data-th-text="${apply.user.username}"></td>
+                            <td data-th-text="${apply.user.name}"></td>
+                            <td data-th-text="${apply.user.sharesNumber}"></td>
+                            <td><a th:href="@{'/userspance/'+${apply.user.id}}" target="_blank">查看用户</a></td>
+                            <td th:id="'apply'+${apply.id}">
+                                <button data-th-attr="applyId=${apply.id}" class="btn btn-success" id="tongYi">同意</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <button data-th-attr="applyId=${apply.id}" class="btn btn-primary" id="buTongYi">不同意</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:replace="~{fragments/page :: page3}">...</div>
+            </div>
+            <!-- END TABLE HOVER -->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function getApply(pageIndex) {
+        $.get("/admin/applys", {pageIndex: pageIndex}, function (data) {
+            $("#main-content").html(data);
+        });
+    }
+
+    $("[id=tongYi]").on("click",function () {
+        var applyId=$(this).attr("applyId");
+        $.ajax({
+            url:"/user/admin/apply",
+            type:"get",
+            data:{"id":applyId,"result":true},
+            success:function (data) {
+                if(data.code==0){
+                    $("#apply"+applyId).html("已处理");
+                }
+                else {
+                    toastr.error(data.msg);
+                }
+            }
+        });
+    });
+
+    $("[id=buTongYi]").on("click",function () {
+        var applyId=$(this).attr("applyId");
+        $.ajax({
+            url:"/user/admin/apply",
+            type:"get",
+            data:{"id":applyId,"result":false},
+            success:function (data) {
+                if(data.code==0){
+                    $("#apply"+applyId).html("已处理");
+                }
+                else {
+                    toastr.error(data.msg);
+                }
+            }
+        });
+    });
+
+    // 分页
+    $.tbpage("#applyListMain", function (pageIndex, pageSize) {
+        getApply(pageIndex);
+    });
+</script>

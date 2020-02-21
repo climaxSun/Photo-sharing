@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: flower
+  datasource:
+    url: #
+    username: #
+    password: #
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+  MaxAutoRetries: 2
+  MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+server:
+  port: 7921

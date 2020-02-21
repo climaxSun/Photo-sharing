@@ -1,0 +1,304 @@
+<div class="container-fluid" id="userList" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- TABLE HOVER -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-6 col-lg-7 col-sm-6 col-md-6">
+                                <input type="text" class="form-control " placeholder="输入用户名称进行搜索" id="searchName" th:value="*{name}">
+                            </div>
+                            <div class="col-xs-5 col-lg-4 col-sm-4 col-md-5">
+                                <a class="btn btn-info" id="searchNameBtn" role="button">
+                                    <i aria-hidden="true" class="fa fa-search"></i>
+                                </a>
+                                <a class="btn btn-primary " role="button" id="addUser">
+                                    <i aria-hidden="true" class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>登录名</th>
+                            <th>用户名</th>
+                            <th>等级</th>
+                            <th>邮件</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="user:${users}">
+                            <td data-th-text="${user.id}">x</td>
+                            <td data-th-text="${user.username}">x</td>
+                            <td data-th-text="${user.name}">x</td>
+                            <td>
+                                <span data-th-if="${user.lv} eq 1">普通用户</span>
+                                <span data-th-if="${user.lv} eq 2">植物达人</span>
+                                <span data-th-if="${user.lv} eq 3">普通管理员</span>
+                                <span data-th-if="${user.lv} eq 0">超级管理员</span>
+                            </td>
+                            <td data-th-text="${user.email}">x</td>
+                            <td>
+                                <a href="#"><i class="fa fa-pencil fa-fw" data-th-attr="userId=${user.id},userLv=${user.lv}"
+                                               id="editUser"></i></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#"><i class="fa fa-trash-o fa-fw" data-th-attr="userId=${user.id},userLv=${user.lv}"
+                                               id="deleteUser"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:replace="~{fragments/page :: page3}">...</div>
+            </div>
+            <!-- END TABLE HOVER -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="userEditModalLabel">用户修改</h4>
+            </div>
+            <div class="modal-body" id="userEditModalMain"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="editUserBtn">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="userAddModalLabel">用户增加</h4>
+            </div>
+            <div class="modal-body" id="userAddModalMain">
+                <div class="container-fluid">
+                    <form id="userAddForm">
+                        <div class="form-group">
+                            <label for="username" class="col-form-label">账号名</label>
+                            <input type="text" class="form-control" id="username" name="username"   maxlength="50" placeholder="请输入账号，至少3个字符，至多20个">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">姓名</label>
+                            <input type="text" class="form-control" id="name" name="name"  maxlength="20" placeholder="请输入姓名，至少2个字符，至多20个" >
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-form-label">邮箱</label>
+                            <input type="email" class="form-control" id="email" name="email"  maxlength="50" placeholder="请输入邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-form-label">密码</label>
+                            <input type="password" class="form-control" id="password" name="password" maxlength="30" placeholder="请输入密码，字母或特殊符号和数字结合" >
+                        </div>
+                        <div class="form-group">
+                            <label for="lv" class="col-form-label">角色</label>
+                            <select id="lv" name="lv" class="form-control form-control-chosen" data-placeholder="请选择">
+                                <option value="1">普通用户</option>
+                                <option value="2">植物达人</option>
+                                <option value="3" id="selectOption3">普通管理员</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="addUserBtn">添加</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var userTr;
+    var name = [[${name}]];
+    var _pageIndex=[[${number}]];
+    if(adminLv===3){
+        $("#userAddModal #selectOption3").attr("disabled","disabled");
+    }
+
+    function IsEmail(email) {
+        var reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
+        return reg.test(email);
+    }
+
+    function getUser(pageIndex) {
+        $.get("/admin/users", {pageIndex: pageIndex, "name": name}, function (data) {
+            $("#main-content").html(data);
+        });
+    }
+
+    $("#searchNameBtn").on("click",function () {
+        name=$("#searchName").val();
+        $.get("/admin/users", {"name": name}, function (data) {
+            $("#main-content").html(data);
+        });
+    });
+
+    $("[id=deleteUser]").on("click",function () {
+        var deleteUserTd=$(this);
+        var userLv=deleteUserTd.attr("userLv")-0;
+        if(adminLv===3){
+            if(userLv===3 || userLv===0){
+                toastr.error("权限不足!!!");
+                return;
+            }
+        }
+        if(adminLv===0){
+            if(userLv===0){
+                toastr.error("权限不足!!!");
+                return;
+            }
+        }
+        $.ajax({
+            url:"/user/admin/user",
+            type:"delete",
+            data:{"userId":deleteUserTd.attr("userId")},
+            success:function (data) {
+                if(data.code==0){
+                    toastr.success("删除成功");
+                    deleteUserTd.parents('tr').remove();
+                }
+                else{
+                    toastr.error(data.msg);
+                }
+            },
+            error:function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+
+    $("[id=editUser]").on("click",function () {
+        var editUserTd=$(this);
+        userTr=editUserTd.parents('tr');
+        var userId=editUserTd.attr("userId");
+        var userLv=editUserTd.attr("userLv")-0;
+        if(adminLv===3){
+            if(userLv===0 || userLv===3){
+                console.log(adminId+"   "+userId);
+                if(adminId!=userId){
+                    toastr.error("权限不足!!!");
+                    return;
+                }
+            }
+        }
+        $.ajax({
+            url:"/admin/user",
+            type:"get",
+            data:{"userId":userId},
+            success:function (data) {
+                $("#userEditModalMain").html(data);
+                $("#userEditModal").modal('show');
+            },
+            error:function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+
+    $("#addUser").on("click",function () {
+        $("#userAddModal").modal('show');
+        $("#userAddForm #username").val("");
+        $("#userAddForm #name").val("");
+        $("#userAddForm #password").val("");
+        $("#userAddForm #email").val("");
+    });
+
+    $("#editUserBtn").on("click",function () {
+        var userId=$("#userEditForm #userId").val().trim();
+        var name=$("#userEditForm #name").val().trim();
+        var email=$("#userEditForm #email").val().trim();
+        var lv=$("#userEditForm #lv").val();
+        if (name.length < 2) {
+            alert("用户名称长度不够！最小为2位");
+            return;
+        }
+        if (name.length > 20) {
+            alert("用户名称长度太长！最大为20位");
+            return;
+        }
+        if(IsEmail(email)==false){
+            alert("邮箱格式错误，请输入正确的格式");
+            return;
+        }
+        $.ajax({
+            url:"/user/admin/user",
+            type:"post",
+            data:{"userId":userId,"name":name,"email":email,"lv":lv},
+            success:function (data) {
+                if(data.code==0){
+                    toastr.success("修改成功!!!");
+                    getUser(_pageIndex);
+                }else{
+                    toastr.error(data.msg);
+                }
+            },error:function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+    });
+
+    $("#addUserBtn").on("click",function () {
+        var username=$("#userAddForm #username").val().trim();
+        var name=$("#userAddForm #name").val().trim();
+        var email=$("#userAddForm #email").val().trim();
+        var password=$("#userAddForm #password").val().trim();
+        var lv=$("#userAddForm #lv").val();
+        if (username.length < 3) {
+            alert("账号名长度最小为3，你的长度不够，请重新输入！");
+            return;
+        }
+        if (username.length > 20) {
+            alert("账号名长度太长，请重新输入！");
+        }
+        if (password.length < 6) {
+            alert("密码长度最小为6，请重新输入！");
+            return;
+        }
+        if (name.length < 2) {
+            alert("用户名称长度不够！最小为2位");
+            return;
+        }
+        if (name.length > 20) {
+            alert("用户名称长度太长！最大为20位");
+            return;
+        }
+        if(IsEmail(email)==false){
+            alert("邮箱格式错误，请输入正确的格式");
+            return;
+        }
+        password = hex_md5(password);
+        $.ajax({
+            url:"/user/admin/user",
+            type:"post",
+            data:{"name":name,"email":email,"lv":lv,"username":username,"lv":lv,"password":password},
+            success:function (data) {
+                if(data.code==0){
+                    toastr.success("添加成功!!!");
+                    getUser(_pageIndex);
+                }else{
+                    toastr.error(data.msg);
+                }
+            },error:function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+    });
+
+    // 分页
+    $.tbpage("#userList", function (pageIndex, pageSize) {
+        getUser(pageIndex);
+    });
+</script>

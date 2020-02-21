@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <title>用户信息</title>
+</head>
+<body style="background-color: #d3d9df">
+<div class="inner-bg">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-3 ">
+                <img class="rounded-circle mx-auto img-fluid"
+                     src="../../static/img/avatar-defualt.jpg"
+                     th:src="${readUser.avatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${readUser.avatar}">
+            </div>
+            <div class="col-9 col-md-6 offset-md-2 col-sm-8 ">
+                <div class="row">
+                    <div class="col-9">
+                        <table>
+                            <tr>
+                                <td class="text-center">用户等级：</td>
+                                <td class="text-left text-info" th:if="${readUser.lv} eq 1">普通用户</td>
+                                <td class="text-left text-info" th:if="${readUser.lv} eq 2">植物达人</td>
+                                <td class="text-left text-info" th:if="${readUser.lv} eq 3">普通管理员</td>
+                                <td class="text-left text-info" th:if="${readUser.lv} eq 0">超级管理员</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">发表篇数：</td>
+                                <td class="text-left text-info">
+                                    <span th:text="${readUser.sharesNumber}"></span>
+                                </td>
+                            </tr>
+                            <tr th:if="${readUser.lv} eq 1">
+                                <td class="text-left" colspan="2" th:if="${readUser.sharesNumber} ge 2">
+                                    <span th:if="${readUser.id == loginUser}"><a href="#" id="lvUp" class="text-info">升级</a>成为植物达人</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="text-right col-3" >
+                        <a href="#" aria-hidden="true" data-target="#reportModal" data-toggle="modal"
+                            class="text-info" id="jubaoUser" th:attr="userId=${readUser.id},type=user">举报</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-left col-3" ><h3><a th:href="'/userspance/u/'+${readUser.username}" class="text-dark">
+                <strong th:text="${readUser.name}"></strong></a></h3></div>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <span data-th-if="${readUser.introduction} == null">暂无简介</span>
+                <span data-th-if="${readUser.introduction} != null" data-th-utext="${readUser.introduction}"></span>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center text-primary"><h2>个人分享中心</h2></div>
+        <hr>
+
+        <div id="mainContainer">
+            <div id="mainContainerRepleace">
+                <div data-th-each="flower:${flowers}">
+                    <div class="row d-block d-md-none">
+                        <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offse-md-2 offset-lg-3 offset-xl-3 col-xl-6 col-lg-6 ">
+                            <div class="row">
+                                <div class="col-2 col-sm-2 col-md-2 col-xl-2 col-lg-2">
+                                    <img class="rounded-circle float-right" src="../../static/img/avatar-defualt.jpg"
+                                         style="height: auto;width: 35px;"
+                                         th:src="${flower.userAvatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${flower.userAvatar}">
+                                </div>
+                                <div class="col-8 col-xl-8 col-lg-8 float-left">
+                                    <h3 th:text="${flower.userName}"  style="display: inline"></h3>
+                                </div>
+                                <div class="float-right col-1 col-xl-2 col-lg-2">
+                                    <a href="#" class="dropdown-toggle float-right" data-toggle="dropdown" ></a>
+                                        <ul class="dropdown-menu dropdown-menu-right" style="min-width: 40px;">
+                                            <li>
+                                                <a href="#" id="reportFlower" th:attr="flowerId=${flower.id},type=flower"
+                                                   aria-hidden="true" data-target="#reportModal" data-toggle="modal"><span>举报</span></a>
+                                            </li>
+                                        </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row wow fadeIn">
+                        <!--Grid column-->
+                        <div class="col-md-7 col-lg-5 col-xl-4">
+                            <!--Featured image-->
+                            <div class="view overlay rounded z-depth-1">
+                                <div class="carousel view z-depth rounded slide" data-ride="carousel" id="demo22"
+                                     th:id="'flower'+${flower.id}">
+                                    <!-- 轮播图片 -->
+                                    <!-- 指示符 -->
+                                    <ul class="carousel-indicators">
+                                        <li data-slide-to="0" class="active" th:class="${iterStat.index}==0 ? 'active ' :''"
+                                            th:each="photoUrl ,iterStat :${flower.photoUrls}" data-target="#demo22"
+                                            th:attr="data-target='#flower'+${flower.id},data-slide-to=${iterStat.index}"></li>
+                                    </ul>
+                                    <div class="carousel-inner">
+                                        <div data-th-each="photoUrl ,iterStat :${flower.photoUrls}"
+                                             th:class="${iterStat.index}==0 ? 'carousel-item active ' :'carousel-item '">
+                                            <img class="img-fluid " style="height: 300px; width: auto; "
+                                                 th:src="'/image/flowers/'+${photoUrl.url}">
+                                        </div>
+                                    </div>
+                                    <!-- 左右切换按钮 -->
+                                    <a class="carousel-control-prev" data-slide="prev" href="#demo22"
+                                       th:attr="href='#flower'+${flower.id}">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" data-slide="next" href="#demo22"
+                                       th:attr="href='#flower'+${flower.id}">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="d-block d-md-none">
+                                <i class="fa fa-comment-o" aria-hidden="true" data-target="#pl"
+                                   data-th-attr="flowerId=${flower.id}"
+                                   data-toggle="modal" id="plmodel" data-th-text="${flower.commentSize}"></i>
+                                <img id="dianzan" src="../../static/img/isVote.png" data-toggle="tooltip"
+                                     style="max-width: 20px;height: auto"
+                                     th:title="${flower.isVote}==false ? '点赞' : '取消点赞'"
+                                     th:attr="flowerId=${flower.id},isVote=${flower.isVote}"
+                                     th:src="${flower.isVote} == false ? '/img/notVote.png' : '/img/isVote.png'">
+                                <span th:text="${flower.voteSize}" th:id="'vote'+${flower.id}">22</span>
+                                <span class="float-right mr-2" data-th-text="${#dates.format(flower.createTime, 'yyyy/MM/dd HH:mm')}"></span>
+                                <br>
+                                <a th:each="tag : ${#strings.arraySplit(flower.tags , ',')}"
+                                   th:href="'/userspance/u/' + ${readUser.username}  + '?keyword='+ ${tag}">
+                                    <span class="text-info" th:text="'#'+${tag}">Web Design</span>
+                                </a>
+                            </div>
+                        </div>
+                        <!--Grid column-->
+                        <div class="col-md-5 col-lg-7 col-xl-7 ml-xl-4 mb-2">
+                            <div class="row d-none d-md-block">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-10 col-sm-10 col-md-10 col-xl-10 col-lg-10">
+                                            <img class="rounded-circle float-left" src="../../static/img/avatar-defualt.jpg"
+                                                 style="height: auto;width: 35px;"
+                                                 th:src="${flower.userAvatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${flower.userAvatar}">
+                                            <h3 th:text="${flower.userName}"  style="display: inline"></h3>
+                                        </div>
+                                        <div class="float-left col-1 col-xl-2 col-lg-2">
+                                            <a href="#" class="dropdown-toggle float-right" data-toggle="dropdown" ></a>
+                                            <ul class="dropdown-menu dropdown-menu-right" style="min-width: 40px;">
+                                                <li>
+                                                    <a href="#" id="reportFlower" th:attr="flowerId=${flower.id},type=flower"
+                                                       aria-hidden="true" data-target="#reportModal" data-toggle="modal"><span>举报</span></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="d-none d-md-block">正文:<span class="float-right mr-2" data-th-text="${#dates.format(flower.createTime, 'yyyy/MM/dd HH:mm')}"></span></h3>
+                            <p class="grey-text" data-th-utext="${flower.content}"></p>
+                            <div class="d-none d-md-block">
+                                <a th:each="tag : ${#strings.arraySplit(flower.tags , ',')}"
+                                   th:href="'/index?keyword='+ ${tag}">
+                                    <span class="text-info" th:text="'#'+${tag}">Web Design</span>
+                                </a>
+                            </div>
+                            <div class="d-none d-md-block">
+                                <i class="fa fa-comment-o" aria-hidden="true" data-target="#pl"
+                                   data-th-attr="flowerId=${flower.id}"
+                                   data-toggle="modal" id="plmodel" data-th-text="${flower.commentSize}"></i>
+                                <img id="dianzan" src="../../static/img/isVote.png" data-toggle="tooltip"
+                                     style="max-width: 20px;height: auto"
+                                     th:title="${flower.isVote}==false ? '点赞' : '取消点赞'"
+                                     th:attr="flowerId=${flower.id},isVote=${flower.isVote}"
+                                     th:src="${flower.isVote} == false ? '/img/notVote.png' : '/img/isVote.png'">
+                                <span th:text="${flower.voteSize}" th:id="'vote'+${flower.id}">22</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br><hr>
+                </div>
+                <div th:replace="~{fragments/page :: page}">...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="pl"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="plmodalLabel">评论详情</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="plFormContainer" style="overflow:auto;"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary"  id="submitEditPL" data-target="#fbPL" data-toggle="modal">我要评论</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="fbPL"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pwdmodalLabel">发表评论</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="fbPLFormContainer">
+                <div class="position-sticky"><textarea class="form-control" rows="5" id="comment"></textarea></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" id="submitComment">发表</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="reportModal"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="jubaoXQ">举报详情</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="JBFormContainer">
+                <div class="position-sticky"><textarea class="form-control" rows="5" id="reason"></textarea></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" id="jubao">举报</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}">...</div>
+<script src="../../static/js/userspance/mdb.min.js" th:src="@{/js/userspance/mdb.min.js}"></script>
+<script src="../../static/js/userspance/u.js" th:src="@{/js/userspance/u.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    var username=[[${readUser.username}]];
+    var keyword=[[${keyword}]];
+</script>
+</body>
+</html>

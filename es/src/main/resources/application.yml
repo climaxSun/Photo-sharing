@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: es
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      repositories:
+        enabled: true
+      cluster-nodes: #
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+  instance:
+    prefer-ip-address: true
+
+server:
+  port: 7909

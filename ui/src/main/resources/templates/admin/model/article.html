@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <div class="col-md-12 col-12 col-lg-12 col-xl-12 card">
+        <header class="text-center card-header">
+            <h1 th:text="${article.title}">软键盘管理</h1>
+            <span class="">作者：<span href="#" data-th-text="${article.user.name}">Abraham</span></span> •
+            <span>[[${#dates.format(article.createTime, 'yyyy/MM/dd HH:mm')}]]</span>
+        </header>
+        <div class="float-left card-header">
+            <h6 style="display: inline">标签:</h6>
+            <span th:each="tag : ${#strings.arraySplit(article.tags , ',')}">
+                <span class="text-info" th:text="'#'+${tag}">Web Design</span>
+            </span>
+        </div>
+        <h3>正文:</h3>
+        <div class="card-body" th:utext="${article.content}">
+        </div>
+    </div>
+</div>

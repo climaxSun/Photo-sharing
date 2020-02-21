@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <title>找回密码</title>
+</head>
+<body>
+<div class="inner-bg">
+    <div class="container">
+        <div class="row">
+            <div class=" col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 form-box">
+                <div class="container">
+                    <img class="img-fluid container" src="../static/img/tubiao.png" th:src="@{/img/tubiao.png}">
+                </div>
+                <div id="emailYZ">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3 class="text-left">请根据你的邮箱找回密码</h3>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        <form action="#" class="login-form" method="post" role="form">
+                            <div class="form-group">
+                                <label class="sr-only" for="email">email</label>
+                                <input class="form-control" id="email" name="email" placeholder="email地址..."
+                                       type="text" >
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="yzm">验证码</label>
+                                <input class="form-control" id="yzm" name="yzm" placeholder="验证码..."
+                                       type="text">
+                                <button type="button" class="btn-info" id="getYZM" value="2">获取验证码</button>
+                            </div>
+                            <button class="btn" id="YZEmail" type="button">下一步</button>
+                        </form>
+                        <div class="text-right">
+                            <span class="text-primary"><a href="/login"> 登录 </a></span>
+                            <span class="text-primary"><a href="/register"> 注册 </a></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="editPWD" class="hidden">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3 class="text-left">请输入你的新密码</h3>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        <form action="#" class="login-form" method="post" role="form">
+                            <input type="hidden" value="" id="userEmail">
+                            <input type="hidden" value="" id="userYZM">
+                            <div class="form-group">
+                                <label class="sr-only" for="password">新密 码</label>
+                                <input class="form-control" id="password" name="password" placeholder="密码..."
+                                       type="password">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="confirmPassword">确认新密码</label>
+                                <input class="form-control" id="confirmPassword" name="confirmPassword"
+                                       placeholder="确认密码..."
+                                       type="password">
+                            </div>
+                            <button class="btn" id="retrievePWD" type="button">确定</button>
+                        </form>
+                        <div class="text-right">
+                            <span class="text-primary"><a href="/login"> 登录 </a></span>
+                            <span class="text-primary"><a href="/register"> 注册 </a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-th-fragment="header">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Tether core CSS -->
+    <link href="../../static/css/tether.min.css" th:href="@{/css/tether.min.css}" rel="stylesheet">
+
+    <!-- Font-Awesome CSS -->
+    <link href="../../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+    <link href="../../static/css/bootstrap-reboot.min.css" th:href="@{/css/bootstrap-reboot.min.css}" rel="stylesheet">
+    <link href="../../static/css/bootstrap-grid.min.css" th:href="@{/css/bootstrap-grid.min.css}" rel="stylesheet">
+    <link href="../../static/css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet">
+    <link href="../../static/css/form-elements.css" th:href="@{/css/form-elements.css}" rel="stylesheet">
+    <link href="../../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- toastr CSS -->
+    <link href="../../static/css/toastr.min.css" th:href="@{/css/toastr.min.css}" rel="stylesheet">
+    <link href="../../static/css/cropbox.css" th:href="@{/css/cropbox.css}" rel="stylesheet">
+    <link href="../../static/css/fileinput.css" th:href="@{/css/fileinput.css}" rel="stylesheet">
+    <link href="../../static/themes/explorer-fas/theme.css" th:href="@{/themes/explorer-fas/theme.css}" media="all" rel="stylesheet" type="text/css"/>
+    <link href="../../static/css/component-tageditor.min.css" th:href="@{/css/component-tageditor.min.css}" rel="stylesheet">
+
+    <!--
+      <link href="../../static/css/component-chosen.min.css" th:href="@{/css/component-chosen.min.css}" rel="stylesheet">
+      <link href="../../static/css/cropbox.css" th:href="@{/css/cropbox.css}" rel="stylesheet">
+      <link href="../../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+      <link href="../../static/css/nprogress.css" th:href="@{/css/nprogress.css}" rel="stylesheet">
+      <link href="../../static/css/tether-theme-arrows-dark.min.css" th:href="@{/css/tether-theme-arrows-dark.min.css}" rel="stylesheet">
+      <link href="../../static/css/tether-theme-arrows.min.css" th:href="@{/css/tether-theme-arrows.min.css}" rel="stylesheet">
+      <link href="../../static/css/tether-theme-basic.min.css" th:href="@{/css/tether-theme-basic.min.css}" rel="stylesheet">
+      <link href="../../static/css/thinker-md.vendor.css" th:href="@{/css/thinker-md.vendor.css}" rel="stylesheet">-->
+      <link href="../../static/css/thymeleaf-bootstrap-paginator.css" th:href="@{/css/thymeleaf-bootstrap-paginator.css}" rel="stylesheet">
+    <link href="../../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">花间花舍</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/identification">识别花</a>
+                </li>
+
+            </ul>
+            <div id="isLogin" class="hidden">
+                <div class="row">
+                    <div class="dropdown">
+                        <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span id="name">x</span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" id="grzy">个人主页</a>
+                            <a class="dropdown-item" href="/userspance/profile">个人设置</a>
+                            <a class="dropdown-item" href="#" id="readApply">查看申请结果</a>
+                        </div>
+                    </div>
+                    <a href="/userspance/share" class="btn btn-outline-success my-2 my-sm-0">分享花图</a>
+                    <a href="/userspance/shareArticle" class="btn btn-outline-success my-2 my-sm-0" id="shareArticle">发表文章</a>
+                    <a href="#" class="btn btn-outline-success my-2 my-sm-0" id="logout">退出</a>
+
+                </div>
+            </div>
+            <div id="notLogin" class="hidden">
+                <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">登录</a>
+                <a href="/register" class="btn btn-outline-success my-2 my-sm-0" type="submit">注册</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<div class="container-fluid">
+
+	<form   th:object="${user}" id="userEditForm">
+		<input type="hidden" name="id" th:value="*{id}" id="userId">
+
+		<div class="form-group ">
+			<label for="username" class="col-form-label">账号</label>
+			<input type="text" class="form-control" id="username" name="username"  th:value="*{username}"
+				   maxlength="50" placeholder="请输入账号，至少3个字符，至多20个" disabled>
+		</div>
+		<div class="form-group">
+			<label for="email" class="col-form-label">邮箱</label>
+			<input type="email" class="form-control" id="email" name="email" th:value="*{email}" maxlength="50" placeholder="请输入邮箱">
+		</div>
+		<div class="form-group">
+			<label for="name" class="col-form-label">姓名</label>
+			<input type="text" class="form-control" id="name" name="name" th:value="*{name}" maxlength="20" placeholder="请输入姓名，至少2个字符，至多20个" >
+		</div>
+		<div class="form-group">
+			<label for="lv" class="col-form-label">角色</label>
+			<select id="lv" name="lv" class="form-control form-control-chosen" data-placeholder="请选择">
+				<option value="1" data-th-selected="*{lv} eq 1">普通用户</option>
+				<option value="2" data-th-selected="*{lv} eq 2">植物达人</option>
+				<option value="3" data-th-selected="*{lv} eq 3" id="selectOption3">普通管理员</option>
+				<option value="0" data-th-selected="*{lv} eq 0" disabled>超级管理员</option>
+			</select>
+		</div>
+	</form>
+
+</div>
+<!-- /.container -->
+<script th:inline="javascript" type="text/javascript">
+	var userLv=[[${user.lv}]]-0;
+    var userId=[[${user.id}]]-0;
+	if(userLv===0){
+	    $("#userEditForm #lv").attr("disabled","disabled");
+	}
+	if(adminLv===3){
+        if(adminId===userId){
+            $("#userEditForm #lv").attr("disabled","disabled");
+		}else{
+            $("#userEditForm #selectOption3").attr("disabled","disabled");
+		}
+    }
+
+</script>

@@ -1,0 +1,33 @@
+server:
+  port: 7904
+spring:
+  application:
+    name: ui
+  thymeleaf:
+    encoding: UTF-8
+    cache: false
+  main:
+    allow-bean-definition-overriding: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+  MaxAutoRetries: 2
+  MaxAutoRetriesNextServer: 2 #切换实例的重试次数

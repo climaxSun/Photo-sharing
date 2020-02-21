@@ -1,0 +1,56 @@
+server:
+  port: 7901
+
+spring:
+  application:
+    name: zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+  instance:
+    prefer-ip-address: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 125000
+ribbon:
+  ConnectTimeout: 30000
+  ReadTimeout: 30000
+  eureka:
+    enabled: true
+
+zuul:
+  routes:
+    user:   #随便写   保证唯一
+      path: /user/**   #映射路径
+      serviceId: user-service #映射的服务名称
+    ui:
+      path: /**
+      serviceId: ui
+    image:
+      path: /image/**
+      serviceId: image
+    comment-vote:
+      path: /cv/**
+      serviceId: comment-vote
+    flower:
+      path: /flower/**
+      serviceId: flower
+  host:
+    connect-timeout-millis: 20000 #配置下zuul的超时时间
+    socket-timeout-millis: 25000
+  sensitive-headers:
+  add-host-header: true
+  ignored-services: es
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

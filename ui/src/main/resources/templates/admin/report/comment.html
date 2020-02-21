@@ -1,0 +1,112 @@
+<div class="container-fluid" id="commentReport" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- TABLE HOVER -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <p>评论审核</p>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>被举报的评论</th>
+                                <th>原因</th>
+                                <th>处理</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-th-each="report:${reports}">
+                                <td><a href="#" class="text-info" id="readComment" th:attr="commentId=${report.reportedId}">查看详细评论</a></td>
+                                <td data-th-utext="${report.reason}"></td>
+                                <td th:id="'report'+${report.id}">
+                                    <button data-th-attr="reportId=${report.id}" class="btn btn-danger" id="weigui">违规</button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button data-th-attr="reportId=${report.id}" class="btn btn-primary" id="buweigui">未违规</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:replace="~{fragments/page :: page3}">...</div>
+            </div>
+            <!-- END TABLE HOVER -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="readCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="readCommentModalLabel">评论详情</h4>
+            </div>
+            <div class="modal-body" id="readCommentModalMain">
+                <div class="container-fluid">
+                    <h4>评论内容:</h4>
+                    <p  id="readCommentP">
+
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+    function getReportComments(pageIndex) {
+        $.get("/report/comment", {pageIndex: pageIndex}, function (data) {
+            $("#main-content").html(data);
+        });
+    }
+
+    $("[id=readComment]").on("click",function () {
+        var commentId=$(this).attr("commentId");
+        $.ajax({
+            url:"/cv/comment/"+commentId,
+            type:"get",
+            data:{},
+            success:function (data) {
+                if(data.code==0){
+                    $("#readCommentModal #readCommentModalMain #readCommentP").html(data.result.content);
+                    $("#readCommentModal").modal('show');
+                }else{
+                    toastr.error(data.msg);
+                }
+            }
+        });
+    });
+
+    $("[id=weigui]").on("click",function () {
+        var reportId=$(this).attr("reportId");
+        $.ajax({
+            url:"/cv/report",
+            type:"put",
+            data:{"reportId":reportId,"result":true},
+            success:function (data) {
+                if(data.code==0)
+                $("#report"+reportId).html("已处理");
+            }
+        });
+    });
+
+    $("[id=buweigui]").on("click",function () {
+        var reportId=$(this).attr("reportId");
+        $.ajax({
+            url:"/cv/report",
+            type:"put",
+            data:{"reportId":reportId,"result":false},
+            success:function (data) {
+                if(data.code==0)
+                $("#report"+reportId).html("已处理");
+            }
+        });
+    });
+
+    // 分页
+    $.tbpage("#commentReport", function (pageIndex, pageSize) {
+        getReportComments(pageIndex);
+    });
+</script>

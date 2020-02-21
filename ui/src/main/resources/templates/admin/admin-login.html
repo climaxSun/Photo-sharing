@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" class="fullscreen-bg" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Login</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link href="../../static/css/admin/bootstrap.min.css" rel="stylesheet" th:href="@{/css/admin/bootstrap.min.css}">
+	<link href="../../static/css/font-awesome.min.css" rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+	<link href="../../static/css/admin/linearicons/style.css" rel="stylesheet"
+		  th:href="@{/css/admin/linearicons/style.css}">
+	<!-- MAIN CSS -->
+	<link href="../../static/css/admin/main.css" rel="stylesheet" th:href="@{/css/admin/main.css}">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+
+	<link href="../../static/css/admin/demo.css" rel="stylesheet" th:href="@{/css/admin/demo.css}">
+	<link href="../../static/css/toastr.min.css" th:href="@{/css/toastr.min.css}" rel="stylesheet">
+
+</head>
+
+<body>
+<!-- WRAPPER -->
+<div id="wrapper">
+	<div class="vertical-align-wrap">
+		<div class="vertical-align-middle">
+			<div class="auth-box ">
+				<div class="left">
+					<div class="content">
+						<div class="header">
+							<div class="logo text-center">
+								<img src="/img/tubiao.png" alt="Klorofil Logo" class="img-responsive center-block">
+							</div>
+							<p class="lead">登录到您的帐户</p>
+						</div>
+						<form class="form-auth-small" action="#">
+							<div class="form-group">
+								<label for="signin-username" class="control-label sr-only">用户名</label>
+								<input type="text" class="form-control" id="signin-username" placeholder="用户名">
+							</div>
+							<div class="form-group">
+								<label for="signin-password" class="control-label sr-only">密码</label>
+								<input type="password" class="form-control" id="signin-password" placeholder="Password">
+							</div>
+							<button type="button" class="btn btn-primary btn-lg btn-block" id="adminLogin">登录</button>
+							<div class="bottom">
+								<span class="helper-text"><i class="fa fa-lock"></i> <a href="/findPassword">忘记密码?</a></span>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="right">
+					<div class="overlay"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END WRAPPER -->
+</body>
+<script src="../../static/js/jquery-3.2.1.min.js" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script src="../../static/js/jquery.cookie.js" th:src="@{/js/jquery.cookie.js}"></script>
+<script src="../../static/js/md5.js" th:src="@{/js/md5.js}"></script>
+<script src="../../static/js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<script type="text/javascript">
+	$("#adminLogin").on("click",function () {
+		var username=$("#signin-username").val().trim();
+        var pwd=$("#signin-password").val().trim();
+        if (username.length < 3) {
+            alert("账号名长度最小为3，你的长度不够，请重新输入！");
+            return;
+        }
+        if (username.length > 20) {
+            alert("账号名长度太长，请重新输入！");
+        }
+        if (pwd.length < 6) {
+            alert("密码长度最小为6，请重新输入！");
+            return;
+        }
+        pwd = hex_md5(pwd);
+        $.ajax({
+            url: '/user/login',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                "username": username,
+                "password": pwd
+            }),
+            success: function (data) {
+                if (data.code == 0) {
+                    console.log(data.result.lv);
+                    if(data.result.lv!='0' && data.result.lv!='3'){
+                        toastr.error("不是管理员");
+                        return;
+					}
+                    alert("登录成功");
+                    $.cookie("adminToken", data.result.token, {expires: 1, path: '/', domain: '', secure: false, raw: false});
+                    // 成功后，重定向
+                    window.location.href = "/admin";
+                } else {
+                    toastr.error("error!" + data.msg);
+                }
+            },
+            error: function (data) {
+                toastr.error(data);
+            }
+        });
+    });
+</script>
+</html>

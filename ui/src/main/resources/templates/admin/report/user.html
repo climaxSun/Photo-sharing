@@ -1,0 +1,76 @@
+<div class="container-fluid" id="userReport" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- TABLE HOVER -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <p>用户审核</p>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>被举报用户Id</th>
+                            <th>原因</th>
+                            <th>查看用户</th>
+                            <th>处理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="report:${reports}">
+                            <td data-th-text="${report.reportedId}"></td>
+                            <td data-th-text="${report.reason}"></td>
+                            <td><a th:href="@{'/userspance/'+${report.reportedId}}" target="_blank">查看用户</a></td>
+                            <td th:id="'report'+${report.id}">
+                                <button data-th-attr="reportId=${report.id}" class="btn btn-danger" id="fenhao">违规封号</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <button data-th-attr="reportId=${report.id}" class="btn btn-primary" id="buweigui">未违规</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:replace="~{fragments/page :: page3}">...</div>
+            </div>
+            <!-- END TABLE HOVER -->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function getReportComments(pageIndex) {
+        $.get("/report/user", {pageIndex: pageIndex}, function (data) {
+            $("#main-content").html(data);
+        });
+    }
+
+    $("[id=fenhao]").on("click",function () {
+        var reportId=$(this).attr("reportId");
+        $.ajax({
+            url:"/cv/report",
+            type:"put",
+            data:{"reportId":reportId,"result":true},
+            success:function (data) {
+                if(data.code==0)
+                $("#report"+reportId).html("已处理");
+            }
+        });
+    });
+
+    $("[id=buweigui]").on("click",function () {
+        var reportId=$(this).attr("reportId");
+        $.ajax({
+            url:"/cv/report",
+            type:"put",
+            data:{"reportId":reportId,"result":false},
+            success:function (data) {
+                if(data.code==0)
+                $("#report"+reportId).html("已处理");
+            }
+        });
+    });
+
+    // 分页
+    $.tbpage("#userReport", function (pageIndex, pageSize) {
+        getReportComments(pageIndex);
+    });
+</script>

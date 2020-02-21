@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>分享花卉</title>
+</head>
+<body>
+<div class="inner-bg">
+    <div class="container my-4">
+        <div class="card ">
+            <div class="card-block">
+                <label for="title">标题:</label>
+                <input type="text" class="form-control form-control-tag" id="title">
+                <div class="row mt-1">
+                    <div class="col-lg-12">
+                        标签： <input type="text" class="form-control form-control-tag" id="tags">
+                    </div>
+                    <div class="col-lg-12">
+                        <label for="content">正文:</label>
+                        <div id="content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="flower_sumbit" class="btn btn-blue">提交</button>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="../../static/js/wangEditor.min.js" th:src="@{/js/wangEditor.min.js}"></script>
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#content');
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor.customConfig.menus = [
+        'head','fontSize','bold','italic','underline','foreColor',
+        'backColor','justify','image'
+    ];
+    editor.customConfig.uploadImgServer = '/image/upload/article';
+    editor.customConfig.uploadImgMaxLength = 5;
+    editor.customConfig.uploadFileName = 'articleFile';
+    editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+    editor.customConfig.uploadImgHooks = {
+        fail: function (xhr, editor, result) {
+            // 图片上传并返回结果，但图片插入错误时触发
+            // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
+            toastr.error("插入图片失败");
+            toastr.error(result.data);
+        },
+        error: function (xhr, editor) {
+            // 图片上传出错时触发
+            // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象
+            toastr.error("上传图片失败");
+        }
+    };
+    editor.customConfig.showLinkImg = false;
+
+    editor.create();
+    $("#getHtml").on("click",function () {
+        alert(editor.txt.html());
+    });
+    $("#tags").tagEditor({
+        initialTags: [],
+        maxTags: 5,
+        delimiter: ',',
+        forceLowercase: false,
+        animateDelete: 0,
+        placeholder: '请输入标签'
+    });
+
+    $("#flower_sumbit").click(function () {
+        var tags = $("#tags").val();
+        var title=$("#title").val();
+        var content=editor.txt.html();
+        if(content==""){
+            toastr.error("请输入正文内容！");
+            return;
+        }
+        if(title.length<2 ||title.length>50){
+            toastr.error("标题长度不符合，请控制在2-50之间");
+            return;
+        }
+        if(tags.length==0){
+            toastr.error("请设置标签");
+            return;
+        }
+        $.ajax({
+            url: "/flower/article",
+            type: 'POST',
+            dataType: "json",
+            data: {"title": title,"tag":tags,"content":content},
+            success: function (data) {
+                if(data.code==0){
+                    alert("分享成功!");
+                    window.location.href="/article/"+data.result.id;
+                }else{
+                    toastr.error(data.msg);
+                    if(data.code==0){
+                        window.location.href="/login";
+                    }
+                }
+            },
+            error: function (data) {
+                toastr.error(data.responseText);
+            }
+        });
+    });
+</script>
+</body>
+</html>

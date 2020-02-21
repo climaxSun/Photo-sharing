@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+
+</head>
+<body style="background-color: #d3d9df">
+<div class="inner-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-xl-3 col-lg-4 col-sm-12">
+                <div class="row">
+                    <div class="col-md-12 col-sm-10 offset-sm-1 offset-md-0 text-center">
+                        <span>
+                        <a class="user-edit-avatar" data-target="#flipFlop"
+                           data-th-attr="userName=xx" data-toggle="modal"
+                           role="button">
+                                    <img class="img-fluid rounded user-avatar "
+                                         src="../../static/img/avatar-defualt.jpg"
+                                         th:src="${user.avatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${user.avatar}">
+                                </a>
+                        </span>
+                        <div class="text-info text-center">点击头像进行修改</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-box">
+                <div class="card ">
+                    <h5 class="card-header">
+                        <div class="row">
+                            <span class="text-left col-6"><i class="fa fa-cog" aria-hidden="true"></i> 个人设置</span>
+                            <span class="text-right text-info col-6 btn" data-toggle="modal" data-target="#pwdModal">修改密码</span>
+                        </div>
+                    </h5>
+                    <div class="card-block">
+                        <div class="form-bottom">
+                            <form action="#" class="login-form" method="post" role="form" th:object="${user}" id="editForm">
+                                <div class="form-group">
+                                    <label class="" for="username">账号名</label>
+                                    <input class="form-control" id="username" name="username" placeholder="账号名..."
+                                           readonly="readonly"  type="text" th:value="*{username}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="" for="email">邮  箱</label>
+                                    <input class="form-control" id="email" name="email" placeholder="email..."
+                                           type="text" th:value="*{email}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="" for="name">用户名</label>
+                                    <input class="form-control" id="name" name="name" placeholder="用户名..."
+                                           type="text" th:value="*{name}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="" for="introduction">简  介</label>
+                                    <textarea class=" form-control" id="introduction" name="introduction" placeholder="简介..."
+                                           type="text" th:text="*{introduction}"></textarea>
+                                </div>
+                                <button class="btn" id="editButton" type="button">保存</button>
+                            </form>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- The modal -->
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="flipFlop"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">编辑头像</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="avatarFormContainer"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" id="submitEditAvatar">提交</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="pwdModal"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="pwdmodalLabel">修改密码</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" id="newPWD" name="newPWD" placeholder="输入新密码..." type="password">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" id="submitEditPWD">提交</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}">...</div>
+<script src="../../static/js/cropbox.js" th:src="@{/js/cropbox.js}"></script>
+<script src="../../static/js/userspance/main.js" th:src="@{/js/userspance/main.js}"></script>
+
+</body>
+</html>

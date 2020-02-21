@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <title>登录</title>
+</head>
+<body style="background-color: #d3d9df">
+<div class="inner-bg">
+    <div class="container">
+        <div class="row">
+            <div class=" col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 form-box">
+                <div class="container">
+                    <img class="img-fluid container" src="../static/img/tubiao.png" th:src="@{/img/tubiao.png}">
+                </div>
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h3 class="text-left">欢迎来到花间花舍</h3>
+                        <p>请输入您的<span class="text-info">账号名</span>和密码进行登录:</p>
+                    </div>
+                </div>
+                <div class="form-bottom">
+                    <form role="form" action="#" method="post" class="login-form">
+                    <div class="form-group">
+                        <label class="sr-only" for="username">账号名</label>
+                        <input class="form-username form-control" id="username" name="username" placeholder="账号名..."
+                               type="text">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="password">密 码</label>
+                        <input class="form-password form-control" id="password" name="password" placeholder="密码..."
+                               type="password">
+                    </div>
+                    <button class="btn" id="loginButton" type="button">登录</button>
+                    </form><br>
+                    <div class="text-right">
+                        <a class="text-primary" href="/findPassword">忘记密码？</a>
+                    </div>
+                </div>
+                <br>
+                <div class="form-control ">
+                    <p class="container" style="text-align: center">没有账号，没关系，欢迎你来<span class="text-primary"><a
+                            href="/register">注册</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

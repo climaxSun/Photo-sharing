@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row">
+
+        <div id="myCarousel" class="carousel slide">
+            <!-- 轮播（Carousel）指标 -->
+            <ol class="carousel-indicators">
+                <li data-slide-to="0" class="active" th:class="${iterStat.index}==0 ? 'active ' :''"
+                    th:each="photoUrl ,iterStat :${flower.photoUrls}" data-target="#demo22"
+                    th:attr="data-slide-to=${iterStat.index}"></li>
+            </ol>
+            <!-- 轮播（Carousel）项目 -->
+            <div class="carousel-inner">
+                <div class="" data-th-each="photoUrl ,iterStat :${flower.photoUrls}"
+                     th:class="${iterStat.index}==0 ? 'item active ' :'item '">
+                    <img th:src="'/image/flowers/'+${photoUrl.url}">
+                </div>
+
+            </div>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+    </div>
+    <div class="row">
+        <h3>文字描述:</h3>
+        <p class="grey-text" data-th-utext="${flower.content}"></p>
+        <h3>标签</h3>
+        <p>
+            <span th:each="tag : ${#strings.arraySplit(flower.tags , ',')}"><span class="text-info" th:text="'#'+${tag}">Web Design</span></span>
+        </p>
+    </div>
+</div>

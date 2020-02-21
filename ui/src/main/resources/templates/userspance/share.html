@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>分享花卉</title>
+</head>
+<body>
+<style type="text/css">
+
+    @import "/css/emoji/nature.css";
+    @import "/css/emoji/object.css";
+    @import "/css/emoji/people.css";
+    @import "/css/emoji/place.css";
+    @import "/css/emoji/Sysmbols.css";
+    @import "/css/emoji/twemoji.css";
+    @import "/css/all.min.css";
+</style>
+<div class="inner-bg">
+    <div class="container my-4">
+        <div class="card ">
+            <h5 class="card-header"><i class="fa fa-adjust" aria-hidden="true"></i>内容输入</h5>
+            <div class="card-block">
+                <label for="comment">正文</label>
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+                <div class="row mt-1">
+                    <div class="col-lg-12">
+                        标签： <input type="text" class="form-control form-control-tag" id="tags">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div></div>
+        <form enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="file-loading">
+                    <input id="file-1" type="file" multiple data-overwrite-initial="false"
+                           data-min-file-count="1" data-theme="fas">
+                </div>
+            </div>
+        </form>
+        <hr>
+
+        <button id="flower_sumbit" class="btn btn-blue">提交</button>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="../../static/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="../../static/js/userspance/sortable.js" th:src="@{/js/userspance/sortable.js}"></script>
+<script src="../../static/js/userspance/fileinput.js" th:src="@{/js/userspance/fileinput.js}"></script>
+<script src="../../static/js/userspance/zh.js" th:src="@{/js/userspance/zh.js}"></script>
+<script src="../../static/themes/fas/theme.js" th:src="@{/themes/fas/theme.js}"></script>
+<script src="../../static/themes/explorer-fas/theme.js" th:src="@{/themes/explorer-fas/theme.js}"></script>
+<script>
+    var photoUrl = new Array();
+
+</script>
+<script src="../../static/js/userspance/share.js" th:src="@{/js/userspance/share.js}"></script>
+</body>
+</html>

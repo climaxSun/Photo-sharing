@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>分享花卉</title>
+</head>
+<style>
+    @import "/css/articleList.css";
+</style>
+<body>
+<div class="inner-bg">
+    <div class="container my-4">
+        <div class="card">
+            <div class="card-header container-fluid">
+                <div class="row">
+                    <div class="col-xs-6 col-lg-7 col-sm-6 col-md-6 col-9">
+                        <input type="text" class="form-control " placeholder="输入关键字搜索文章" id="searchName" th:value="*{keyword}">
+                    </div>
+                    <div class="col-xs-5 col-lg-4 col-sm-4 col-md-5 col-3">
+                        <a class="btn btn-info" id="searchNameBtn" role="button">
+                            <i aria-hidden="true" class="fa fa-search"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="text-warning">温馨提示：本版块所有文章均为科普知识，如若不是请举报该文章</p>
+            </div>
+            <div class="card-body">
+                <div id="ArticleMainContainer">
+                    <div id="ArticleMainContainerRepleace">
+                        <div class="media-list hot_article">
+                            <div class="media border p-3" data-th-each="article:${articles}">
+                                <div class="media-left">
+                                    <img th:src="${article.user.avatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${article.user.avatar}"
+                                         class="rev_a rounded-circle">
+                                </div>
+                                <div class="media-body ml-2">
+                                    <div class="media-heading">
+                                        <p></p>
+                                    </div>
+                                    <a th:href="'/article/'+${article.id}" data-th-text="${article.title}">美丽的莲花</a>
+                                    <p><small>
+                                            <a th:each="tag : ${#strings.arraySplit(article.tags , ',')}"
+                                               th:href="'/article/all/?keyword='+ ${tag}">
+                                                <span class="text-info" th:text="'#'+${tag}">Web Design</span>
+                                            </a>
+                                    </small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:replace="~{fragments/page :: page}">...</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}">...</div>
+<script type="text/javascript" th:inline="javascript">
+    var keyword=[[${keyword}]];
+    $("#searchNameBtn").on("click",function () {
+        keyword=$("#searchName").val();
+        $.get("/article/all", {"keyword": keyword,"async":true}, function (data) {
+            $("#ArticleMainContainer").html(data);
+        });
+    });
+
+    function getArticle(pageIndex,pageSize) {
+        $.get("/article/all", {pageIndex: pageIndex,pageSize:pageSize, "keyword": keyword,async:true}, function (data) {
+            $("#ArticleMainContainer").html(data);
+        });
+    }
+
+    $.tbpage("#ArticleMainContainer", function (pageIndex, pageSize) {
+        getArticle(pageIndex,pageSize);
+    });
+</script>
+</body>
+</html>

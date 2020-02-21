@@ -1,0 +1,131 @@
+<div class="container-fluid" id="userList" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- TABLE HOVER -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-6 col-lg-7 col-sm-6 col-md-6">
+                                <input type="text" class="form-control " placeholder="搜索" id="searchKeyword" th:value="*{keyword}">
+                            </div>
+                            <div class="col-xs-5 col-lg-4 col-sm-4 col-md-5">
+                                <a class="btn btn-info" id="searchKeywordBtn" role="button">
+                                    <i aria-hidden="true" class="fa fa-search"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>标签</th>
+                            <th>详情</th>
+                            <th>时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="article:${articles}">
+                            <td data-th-text="${article.title}">x</td>
+                            <td><span data-th-each="tag:${#strings.arraySplit(article.tags , ',')}" data-th-text="'#'+${tag}"></span></td>
+                            <td><a href="#" class="text-info" th:attr="articleId=${article.id}" id="readArticle">查看文章</a></td>
+                            <td data-th-text="${#dates.format(article.createTime, 'yyyy/MM/dd HH:mm')}"></td>
+                            <td>
+                                <a href="#"><i class="fa fa-trash-o fa-fw" data-th-attr="articleId=${article.id}"
+                                               id="deleteArticle"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:replace="~{fragments/page :: page3}">...</div>
+            </div>
+            <!-- END TABLE HOVER -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="readArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="readArticleModalLabel">文章详情</h4>
+            </div>
+            <div class="modal-body" id="readArticleModalMain">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript" th:inline="javascript">
+    var keyword = [[${keyword}]];
+
+    function isJson(str) {
+        if (typeof str== "object") {
+            return true;
+        }
+        return false;
+    }
+
+    function getArticle(pageIndex) {
+        $.get("/admin/articles", {pageIndex: pageIndex, "keyword": keyword}, function (data) {
+            $("#main-content").html(data);
+        });
+    }
+
+    $("#searchKeywordBtn").on("click",function () {
+        keyword=$("#searchKeyword").val();
+        $.get("/admin/articles", {"keyword": keyword}, function (data) {
+            $("#main-content").html(data);
+        });
+    });
+
+    $("[id=deleteArticle]").on("click",function () {
+        var deleteArticle=$(this);
+        $.ajax({
+            url:"/flower/article/"+deleteArticle.attr("articleId"),
+            type:"delete",
+            success:function (data) {
+                if(data.code==0){
+                    toastr.success("删除成功");
+                    deleteArticle.parents('tr').remove();
+                }
+                else{
+                    toastr.error(data.msg);
+                }
+            },
+            error:function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+
+    $("[id=readArticle]").on("click",function () {
+        var articleId=$(this).attr("articleId");
+        $.ajax({
+            url:"/admin/article/"+articleId,
+            type:"get",
+            success:function (data) {
+                if(isJson(data)){
+                    toastr.error(data.msg);
+                }
+                else{
+                    $("#readArticleModal #readArticleModalMain").html(data);
+                    $("#readArticleModal").modal('show');
+                }
+            }
+        });
+    });
+
+    // 分页
+    $.tbpage("#userList", function (pageIndex, pageSize) {
+        getArticle(pageIndex);
+    });
+</script>

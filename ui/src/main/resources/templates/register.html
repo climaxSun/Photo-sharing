@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <title>注册</title>
+</head>
+<body style="background-color: #d3d9df">
+<div class="inner-bg">
+    <div class="container">
+        <div class="row">
+            <div class=" col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 form-box">
+                <div class="container">
+                    <img class="img-fluid container" src="../static/img/tubiao.png" th:src="@{/img/tubiao.png}">
+                </div>
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h3 class="text-left">加入花间花舍，享受自然的美丽</h3>
+                    </div>
+                </div>
+                <div class="form-bottom">
+                    <form action="#" class="login-form" method="post" role="form" id="registerForm">
+                        <div class="form-group">
+                            <label class="sr-only" for="name">用户名称</label>
+                            <input class="form-control" id="name" name="name" placeholder="用户名称，展示使用..."
+                                   type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="username">账号名</label>
+                            <input class="form-control" id="username" name="username" placeholder="账号名，登录使用..."
+                                   type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="password">密 码</label>
+                            <input class="form-control" id="password" name="password" placeholder="密码..."
+                                   type="password">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="confirmPassword">确认密码</label>
+                            <input class="form-control" id="confirmPassword" name="confirmPassword" placeholder="确认密码..."
+                                   type="password">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="email">email</label>
+                            <input class="form-control" id="email" name="email" placeholder="email地址..."
+                                   type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="yzm">验证码</label>
+                            <input class="form-control" id="yzm" name="yzm" placeholder="验证码..."
+                                   type="text" ><button type="button" class="btn-info" id="getYZM" value="1">获取验证码</button>
+                        </div>
+                        <button class="btn" id="register" type="button" >注册</button>
+                    </form>
+                    <div style="text-align: center">
+                        注册即代表您同意我们的<span class="text-info">条款</span>、<span class="text-info">数据使用政策</span>和<span class="text-info">Cookie政策</span>。
+                    </div>
+                </div>
+                <br>
+                <div class="form-control ">
+                    <p class="container" style="text-align: center">有帐户了？那就快<span class="text-primary"><a
+                            href="/login">登录</a></span>吧</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

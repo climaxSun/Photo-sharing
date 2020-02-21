@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>分享花卉</title>
+</head>
+<body>
+<style type="text/css">
+
+    @import "/css/emoji/nature.css";
+    @import "/css/emoji/object.css";
+    @import "/css/emoji/people.css";
+    @import "/css/emoji/place.css";
+    @import "/css/emoji/Sysmbols.css";
+    @import "/css/emoji/twemoji.css";
+    @import "/css/all.min.css";
+    @import "/css/identification.css";
+    @import "/css/zoomify.min.css";
+</style>
+<div class="inner-bg">
+    <div class="container-fluid">
+        <div>
+            <form>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input imgInput" id="customFile" accept="image/jpeg">
+                    <label class="custom-file-label" for="customFile">选择文件</label>
+                </div>
+            </form>
+            <!--用来显示图片的div，自定义样式-->
+            <div>
+                <img src="" class="img img-fluid rounded img-thumbnail" />
+            </div>
+            <a class="link hidden" href=""></a>
+        </div>
+        <hr>
+        <button id="show" class="btn btn-info">识别</button>
+        <div class="row" id="showFlower">
+            <!--<div class="card col-12 col-sm-6 col-md-4 col-lg-3 colxl-3">
+                 <div class="card-header text-center example">
+                     <img src="/img/aa.jpg " class="rounded img-thumbnail img-fluid" >
+                 </div>
+                <div class="card-body">
+                    <p><small class="text-left">菊科   响应式属</small><span class="float-right">相似度:<span class="text-danger">xx</span></span></p>
+                    <h4>菊花<small>  (野菊,就菊花) </small></h4>
+                    <small >scnskjnmacscsa</small>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="../static/js/identification.js" th:src="@{/js/identification.js}"></script>
+<script src="../static/js/userspance/zoomify.min.js" th:src="@{/js/userspance/zoomify.min.js}"></script>
+
+<script>
+    $(".imgInput").change(function(){
+        $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
+        var file = $(this)[0].files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            $(".link").attr("href",reader.result);
+            $(".link").text(reader.result);
+        };
+        reader.readAsDataURL(file);
+    });
+    $('.example img').zoomify();
+</script>
+</html>

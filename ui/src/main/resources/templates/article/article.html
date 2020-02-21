@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+    <meta charset="UTF-8">
+    <title>分享花卉</title>
+</head>
+<body>
+<div class="inner-bg">
+    <div class="container my-4">
+        <div class="container-fluid">
+            <div class="col-md-12 col-12 col-lg-12 col-xl-12 card">
+                <p class="text-warning">温馨提示：本版块所有文章均为科普知识，如若不是请在页面最下方举报该文章</p>
+                <header class="text-center card-header">
+                    <h1 th:text="${article.title}">软键盘管理</h1>
+                    <span class="">作者：<span href="#" data-th-text="${article.user.name}">Abraham</span></span> •
+                    <span>[[${#dates.format(article.createTime, 'yyyy/MM/dd HH:mm')}]]</span>
+                </header>
+                <div class="float-left card-header">
+                        <h6 style="display: inline">标签:</h6>
+                        <a th:each="tag : ${#strings.arraySplit(article.tags , ',')}"
+                           th:href="'/article/all?keyword='+ ${tag}">
+                            <span class="text-info" th:text="'#'+${tag}">Web Design</span>
+                        </a>
+                </div>
+                <div class="card-body" th:utext="${article.content}">
+                </div>
+            </div>
+            <br>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary" id="gotoAll">
+                    <i class="fa fa-backward"></i>返回文章首页</button>
+                <button type="button" class="btn btn-warning" id="juBaoArticle" aria-hidden="true" data-target="#reportModal" data-toggle="modal"
+                    th:attr="articleId=${article.id}">
+                    <i class="fa fa-warning"></i>举报</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="modalLabel" class="modal fade" id="reportModal"
+           role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="jubaoXQ">举报详情</h4>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="JBFormContainer">
+                <div class="position-sticky"><textarea class="form-control" rows="5" id="reason"></textarea></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" id="jubao">举报</button>
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}">...</div>
+<script>
+    $("#juBaoArticle").on("click",function () {
+        var report=$(this);
+        var reportedId=report.attr("articleId");
+        $("#reportModal").attr("reportedId",reportedId);
+        $("#reportModal").attr("type","article");
+        $("#reason").val("");
+    });
+    $("#gotoAll").on("click",function () {
+       window.location.href="/article/all"
+    });
+</script>
+</body>
+</html>

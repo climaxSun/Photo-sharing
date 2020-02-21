@@ -1,0 +1,21 @@
+server:
+    port: 7903
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: image
+  servlet:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2500MB
+
+flowerUrl: D:/MY/IDEA/SpringCloud/Photo sharing/img/flowers/
+avatarUrl: D:/MY/IDEA/SpringCloud/Photo sharing/img/avatar/
+articleUrl: D:/MY/IDEA/SpringCloud/Photo sharing/img/article/

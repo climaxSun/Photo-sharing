@@ -1,0 +1,61 @@
+<style type="text/css" xmlns:th="http://www.w3.org/1999/xhtml">
+    @import "/css/comment.css";
+</style>
+<div data-th-if="${error}">网络异常请稍后再试</div>
+<div id="showComment" data-th-if="${!error}">
+    <div th:if="${comments.size()} eq 0">暂无评论</div>
+    <div class="media" data-th-each="comment:${comments}" th:if="${comments.size()} gt 0">
+        <div class="media-left response-text-left">
+            <a href="#">
+                <img class="img-fluid" style="height: auto;width: 60px;"
+                     th:src="${comment.userAvatar} == null ? '/img/avatar-defualt.jpg' : '/image/userAvatar/'+${comment.userAvatar}"
+                     src="../../static/img/avatar-defualt.jpg" alt=""/>
+            </a>
+            <h6 style="display: inline"><small th:text="${comment.username} ==null ? '已删除用户': ${comment.username}"></small></h6>
+        </div>
+        <div class="media-body response-text-right ml-2">
+            <a href="#" class="dropdown-toggle float-right" data-toggle="dropdown" ></a>
+            <ul class="dropdown-menu dropdown-menu-right" style="min-width: 40px;">
+                <li>
+                    <a href="#" id="reportComment" th:attr="commentId=${comment.id},type=comment"
+                       aria-hidden="true" data-target="#reportModal" data-toggle="modal"><span class="text-info">举报</span></a>
+                </li>
+            </ul>
+            <h6 style="display: inline" class="float-right mr-2"><small>
+                <span class="float-right" data-th-text="${#dates.format(comment.createTime, 'yyyy/MM/dd HH:mm')}">June 21, 2015</span>
+            </small></h6>
+            <p><small data-th-utext="${comment.content}"></small></p>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <div th:replace="~{fragments/page :: page2}">...</div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+    function getCommentsByFlowerId(pageIndex) {
+        var flowerId=$("#pl").attr("flowerId");
+        $.ajax({
+            url: "/comment",
+            type: 'GET',
+            data:{"flowerId":flowerId,"pageIndex":pageIndex},
+            success: function (data) {
+                $("#plFormContainer").html(data);
+            },
+            error: function () {
+                $("#plFormContainer").html("网络异常请稍后再试!");
+            }
+        });
+    }
+
+    $("[id=reportComment]").on("click",function () {
+        var report=$(this);
+        var reportedId=report.attr("commentId");
+        var type=report.attr("type");
+        $("#reportModal").attr("reportedId",reportedId);
+        $("#reportModal").attr("type",type);
+        $("#reason").val("");
+    });
+    // 分页
+    $.tbpage("#showComment", function (pageIndex, pageSize) {
+        getCommentsByFlowerId(pageIndex);
+    });
+</script>

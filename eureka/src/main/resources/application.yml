@@ -1,0 +1,21 @@
+server:
+  port: 7900
+#因为eurekaService是单机，所以需要做一些配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+    register-with-eureka: false
+    fetch-registry: false
+  instance:
+    prefer-ip-address: true
+  server:
+    enable-self-preservation: true
+spring:
+  application:
+    name: eureka
+  security:
+    user:
+      name: swb
+      password: 123456
+

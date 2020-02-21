@@ -1,0 +1,47 @@
+spring:
+  thymeleaf:
+    cache: true
+    encoding: utf-8
+  application:
+    name: user-service
+  datasource:
+    url: #
+    username: #
+    password: #
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.qq.com
+    username: #
+    password: #
+    port: 465
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  redis:
+    database: 11
+    host: #
+    port: 6379
+    jedis:
+      pool:
+        max-active: 5
+    timeout: 5000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://swb:123456@localhost:7900/eureka
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+server:
+  port: 7911
